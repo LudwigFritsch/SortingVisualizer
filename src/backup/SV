@@ -1,0 +1,158 @@
+import React, { Component } from "react";
+import "./SortingVisualizer.css";
+import getBubbleSortAnimations from "./algorithms/getBubbleSortAnimations.js";
+import getMergeSortAnimations from "./algorithms/getMergeSortAnimations.js";
+import { RangeSlider } from "./RangeSlider.jsx";
+
+// This is the main color of the array bars.
+const PRIMARY_COLOR = "turquoise";
+
+// This is the color of array bars that are being compared throughout the animations.
+const SECONDARY_COLOR = "#4471ef";
+
+// Change this value for the number of bars (value) in the array.
+let NUMBER_OF_ARRAY_BARS = 100;
+
+// Change this value for the speed of the animations.
+const ANIMATION_SPEED_MS = 10;
+
+export class SortingVisualizer extends Component {
+  constructor() {
+    super();
+    this.state = {
+      array: [],
+      clickable: false,
+      sliderVal: 100,
+    };
+    this.resetArray = this.resetArray.bind(this);
+    this.bubbleSort = this.bubbleSort.bind(this);
+    this.mergeSort = this.mergeSort.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    this.resetArray();
+  }
+
+  handleChange(event) {
+    this.setState({ sliderVal: event.target.value });
+    console.log(this.sliderVal);
+  }
+
+  resetArray(arrayBars) {
+    const array = [];
+    for (let i = 0; i < arrayBars; i++) {
+      array.push(getRandomNumberBetween(20, 630));
+    }
+    this.setState({ array });
+    console.log(array.length);
+  }
+
+  mergeSort() {
+    getMergeSortAnimations(this.state.array);
+    // for (let i = 0; i < animations.length; i++) {
+    //   const barOne = document.getElementById(animations[i]);
+    //   barOne.style.backgroundColor = "pink";
+    // }
+  }
+  quickSort() {}
+  heapSort() {}
+  bubbleSort() {
+    const animations = getBubbleSortAnimations(this.state.array);
+
+    for (let i = 0; i < animations.length; i++) {
+      if (animations[i] > -1) {
+        setTimeout(() => {
+          const barOne = document.getElementById(animations[i]);
+          barOne.style.backgroundColor = "pink";
+        }, i * ANIMATION_SPEED_MS);
+      }
+      if (animations[i].length > 1) {
+        setTimeout(() => {
+          const barOne = document.getElementById(animations[i][0]);
+          const barTwo = document.getElementById(animations[i][1]);
+          this.makeColor(barOne, barTwo);
+          const barOneHeigth = barOne.style.height;
+          const barTwoHeigth = barTwo.style.height;
+          if (parseInt(barOneHeigth) > parseInt(barTwoHeigth)) {
+            const temp = barTwo.style.height;
+            barTwo.style.height = barOneHeigth;
+            barOne.style.height = temp;
+          }
+        }, i * ANIMATION_SPEED_MS);
+      }
+    }
+  }
+
+  makeColor(barOne, barTwo) {
+    barOne.style.backgroundColor = SECONDARY_COLOR;
+    barTwo.style.backgroundColor = SECONDARY_COLOR;
+    setTimeout(() => {
+      barOne.style.backgroundColor = PRIMARY_COLOR;
+    }, ANIMATION_SPEED_MS);
+  }
+
+  render() {
+    const array = this.state.array;
+    return (
+      <div>
+        <button onClick={this.resetArray}>Generate new Array</button>
+        <button onClick={this.bubbleSort}>Bubble</button>
+        <button onClick={this.mergeSort}>Merge</button>
+
+        <div className="range-slider">
+          {/* <p>{label}</p>
+          <h3>value: {sliderVal}</h3> */}
+          <input
+            type="range"
+            value={this.sliderVal}
+            // {...sliderProps}
+            // className={`slider ${classes}`}
+            id="myRange"
+            onChange={this.handleChange}
+            // onMouseDown={() => setMouseState("down")} // When mouse down set the mouseState to 'down'
+            // onMouseUp={() => setMouseState("up")} // When mouse down set the mouseState to 'up' | now we can call the parent onChnage
+          />
+        </div>
+
+        <div className="array-container">
+          {array.map((value, Idx) => {
+            return (
+              <div
+                className="array-bar"
+                key={Idx}
+                id={Idx}
+                heigth={value}
+                style={{
+                  backgroundColor: PRIMARY_COLOR,
+                  height: `${value}px`,
+                }}
+              ></div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+}
+
+export function slider() {
+  const slideValue = document.querySelector("span");
+  const inputSlider = document.querySelector("input");
+  inputSlider.oninput = () => {
+    let value = inputSlider.value;
+    NUMBER_OF_ARRAY_BARS = inputSlider.value;
+    slideValue.textContent = value;
+    slideValue.style.left = value / 2 + "%";
+    slideValue.classList.add("show");
+  };
+  inputSlider.onblur = () => {
+    slideValue.classList.remove("show");
+  };
+}
+
+export default SortingVisualizer;
+
+export function getRandomNumberBetween(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
