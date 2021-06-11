@@ -12,9 +12,9 @@
 }
 
 .array-container {
-  border: 4px solid whitesmoke;
+  border: 3px solid rgba(112, 112, 112, 0.8);
   border-radius: 5px;
-  background: rgba(0, 0, 0, 0.8);
+  background: white;
   width: 85%;
   height: 45em;
   display: flex;
@@ -30,6 +30,7 @@
   width: 0.3rem;
   display: inline-block;
   margin: 30px 1px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
 .navbar {

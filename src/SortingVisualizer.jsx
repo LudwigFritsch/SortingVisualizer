@@ -6,10 +6,12 @@ import getHeapSortAnimations from "./algorithms/getHeapSortAnimations.js";
 import getQuickSortAnimations from "./algorithms/getQuickSortAnimations.js";
 
 // This is the main color of the array bars.
-const PRIMARY_COLOR = "turquoise";
+const PRIMARY_COLOR = "rgba(0, 174, 255, 0.6)";
 
 // This is the color of array bars that are being compared throughout the animations.
-const SECONDARY_COLOR = "white";
+const SECONDARY_COLOR = "rgba(0, 0, 0, 0.8)";
+
+const FLESH_COLOR = "rgba(255, 0, 157, 0.6)";
 
 // Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 2;
@@ -31,65 +33,37 @@ const SortingVisualizer = () => {
   }
 
   function heapSort() {
-    //TEST HEAPSORT
-
-    // for (let j = 0; j < 5000; j++) {
-    //   setTimeout(() => {
-    //     eventFire(document.getElementById("resetArray"), "click");
-    //     setTimeout(() => {
-    //       const animations = getHeapSortAnimations(array, array.length);
-
-    //       for (let i = 0; i < animations.length; i++) {
-    //         const barOne = document.getElementById(animations[i][0]);
-    //         const barTwo = document.getElementById(animations[i][2]);
-    //         const barOneHeigth = animations[i][1];
-    //         const barTwoHeigth = animations[i][3];
-
-    //         barTwo.style.height = `${barOneHeigth}px`;
-    //         barOne.style.height = `${barTwoHeigth}px`;
-    //       }
-    //       for (let i = 0; i < arrayBars - 1; i++) {
-    //         const barOne = document.getElementById(i);
-    //         const barTwo = document.getElementById(i + 1);
-    //         const barOneHeigth = barOne.style.height;
-    //         const barTwoHeigth = barTwo.style.height;
-    //         if (parseInt(barOneHeigth) <= parseInt(barTwoHeigth)) {
-    //           console.log("passed");
-    //         }
-    //       }
-    //     }, 500);
-    //   }, j * 1000);
-    // }
-
+    makeClickable("block");
     const animations = getHeapSortAnimations(array, array.length);
 
     for (let i = 0; i < animations.length; i++) {
       setTimeout(() => {
         const barOne = document.getElementById(animations[i][0]);
         const barTwo = document.getElementById(animations[i][2]);
-        makeColorHeap(barOne, barTwo);
+        makeColorHeap(barOne, barTwo, animations[i]);
         const barOneHeigth = animations[i][1];
         const barTwoHeigth = animations[i][3];
 
         barTwo.style.height = `${barOneHeigth}px`;
         barOne.style.height = `${barTwoHeigth}px`;
-      }, i * ANIMATION_SPEED_MS * 6);
+      }, i * ANIMATION_SPEED_MS * 8);
       if (i === animations.length - 1) {
         setTimeout(() => {
           makeArrayFlash();
-        }, i * ANIMATION_SPEED_MS * 6 + 100);
+        }, i * ANIMATION_SPEED_MS * 8 + 100);
       }
     }
   }
 
   function quickSort() {
+    makeClickable("block");
     const animations = getQuickSortAnimations(array, 0, array.length - 1);
     for (let i = 0; i < animations.length; i++) {
       setTimeout(() => {
         if (animations[i].length > 2) {
           const barOne = document.getElementById(animations[i][0]);
           const barTwo = document.getElementById(animations[i][2]);
-          makeColorHeap(barOne, barTwo);
+          makeColorQuick(barOne, barTwo);
           const barOneHeigth = animations[i][1];
           const barTwoHeigth = animations[i][3];
 
@@ -101,10 +75,8 @@ const SortingVisualizer = () => {
         ) {
           const pivotBar = document.getElementById(animations[i][0]);
           makeColorPivot(pivotBar);
-        } else if (
-          animations[i].length === 2 &&
-          animations[i][1] === "pivotTemp"
-        ) {
+        }
+        if (animations[i].length === 2 && animations[i][1] === "pivotTemp") {
           const pivotTemp = document.getElementById(animations[i][0]);
           makeColorTemp(pivotTemp);
         }
@@ -118,6 +90,7 @@ const SortingVisualizer = () => {
   }
 
   function mergeSort() {
+    makeClickable("block");
     const animations = getMergeSortAnimations(array);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
@@ -144,16 +117,24 @@ const SortingVisualizer = () => {
         }, i * ANIMATION_SPEED_MS + 10);
       }
     }
+    console.log(array);
+    for (let i = 0; i < array.length; i++) {
+      const bar = document.getElementById(i);
+      if (bar.style.heigth === `${array[i]}px`) {
+        bar.style.backgroundColor = "yellow";
+      }
+    }
   }
 
   async function bubbleSort() {
+    makeClickable("block");
     const animations = getBubbleSortAnimations(array);
 
     for (let i = 0; i < animations.length; i++) {
       if (animations[i] > -1) {
         setTimeout(() => {
           const barOne = document.getElementById(animations[i]);
-          barOne.style.backgroundColor = "white";
+          barOne.style.backgroundColor = "AliceBlue";
         }, i * ANIMATION_SPEED_MS);
       }
       if (animations[i].length > 1) {
@@ -201,6 +182,7 @@ const SortingVisualizer = () => {
         <div className="a" onClick={mergeSort}>
           Merge Sort
         </div>
+
         <div className="a" onClick={quickSort}>
           Quick Sort
         </div>
@@ -250,20 +232,38 @@ export function makeColor(barOne, barTwo) {
 }
 
 export function makeColorPivot(barOne) {
-  barOne.style.backgroundColor = "purple";
+  barOne.style.backgroundColor = "LightCyan";
 }
 
 export function makeColorTemp(barOne) {
-  barOne.style.backgroundColor = "yellow";
+  barOne.style.backgroundColor = "white";
 }
 
-export function makeColorHeap(barOne, barTwo) {
+export function makeColorHeap(barOne, barTwo, animations) {
+  barOne.style.backgroundColor = SECONDARY_COLOR;
+  barTwo.style.backgroundColor = SECONDARY_COLOR;
+
+  if (animations.length >= 5) {
+    setTimeout(() => {
+      barOne.style.backgroundColor = PRIMARY_COLOR;
+      const bar = document.getElementById(animations[2]);
+      bar.style.backgroundColor = "AliceBlue";
+    }, ANIMATION_SPEED_MS * 8);
+  } else {
+    setTimeout(() => {
+      barOne.style.backgroundColor = PRIMARY_COLOR;
+      barTwo.style.backgroundColor = PRIMARY_COLOR;
+    }, ANIMATION_SPEED_MS * 8);
+  }
+}
+
+export function makeColorQuick(barOne, barTwo) {
   barOne.style.backgroundColor = SECONDARY_COLOR;
   barTwo.style.backgroundColor = SECONDARY_COLOR;
   setTimeout(() => {
     barOne.style.backgroundColor = PRIMARY_COLOR;
     barTwo.style.backgroundColor = PRIMARY_COLOR;
-  }, ANIMATION_SPEED_MS);
+  }, ANIMATION_SPEED_MS * 3);
 }
 
 export function arraysAreEqual(arrayOne, arrayTwo) {
@@ -288,15 +288,21 @@ export function eventFire(el, etype) {
 
 export function makeArrayFlash() {
   const arrayBars = document.getElementsByClassName("array-bar");
-  console.log(arrayBars);
   for (let i = 0; i < arrayBars.length; i++) {
     const bar = arrayBars[i];
-    bar.style.backgroundColor = "salmon";
+    bar.style.backgroundColor = FLESH_COLOR;
   }
   setTimeout(() => {
     for (let i = 0; i < arrayBars.length; i++) {
       const bar = arrayBars[i];
       bar.style.backgroundColor = PRIMARY_COLOR;
     }
-  }, 1000);
+    makeClickable("unblock");
+  }, 1500);
+}
+
+export function makeClickable(arg) {
+  arg === "block"
+    ? (document.getElementById("navbar").style.pointerEvents = "none")
+    : (document.getElementById("navbar").style.pointerEvents = "all");
 }

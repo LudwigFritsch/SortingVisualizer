@@ -10,7 +10,7 @@ export default function getHeapSortAnimations(array) {
   // one by one extract an element from heapSort
   for (let i = size - 1; i >= 0; i--) {
     // move current root to end
-    animations.push([0, array[0], i, array[i]]);
+    animations.push([0, array[0], i, array[i], "final"]);
     let temp = array[0];
     array[0] = array[i];
     array[i] = temp;
