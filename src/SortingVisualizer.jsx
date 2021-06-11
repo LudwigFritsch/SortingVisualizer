@@ -6,15 +6,17 @@ import getHeapSortAnimations from "./algorithms/getHeapSortAnimations.js";
 import getQuickSortAnimations from "./algorithms/getQuickSortAnimations.js";
 
 // This is the main color of the array bars.
-const PRIMARY_COLOR = "rgba(0, 174, 255, 0.6)";
+const PRIMARY_COLOR = "rgb(190, 226, 250)";
 
 // This is the color of array bars that are being compared throughout the animations.
 const SECONDARY_COLOR = "rgba(0, 0, 0, 0.8)";
 
-const FLESH_COLOR = "rgba(255, 0, 157, 0.6)";
+const FLESH_COLOR = "rgb(215, 255, 233)";
+
+const SORTEDCOLOR = "aliceblue";
 
 // Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 2;
+const ANIMATION_SPEED_MS = 4;
 
 const SortingVisualizer = () => {
   const [array, setArray] = useState([]);
@@ -92,6 +94,7 @@ const SortingVisualizer = () => {
   function mergeSort() {
     makeClickable("block");
     const animations = getMergeSortAnimations(array);
+    console.log(animations);
     for (let i = 0; i < animations.length; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
@@ -103,25 +106,26 @@ const SortingVisualizer = () => {
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
+
+          if (i > 2831 && color === PRIMARY_COLOR) {
+            barOneStyle.backgroundColor = SORTEDCOLOR;
+          }
         }, i * ANIMATION_SPEED_MS);
       } else {
         setTimeout(() => {
           const [barOneIdx, newHeight] = animations[i];
           const barOneStyle = arrayBars[barOneIdx].style;
           barOneStyle.height = `${newHeight}px`;
+          if (i > 2831) {
+            barOneStyle.backgroundColor = SORTEDCOLOR;
+          }
         }, i * ANIMATION_SPEED_MS);
       }
+
       if (i === animations.length - 1) {
         setTimeout(() => {
           makeArrayFlash();
         }, i * ANIMATION_SPEED_MS + 10);
-      }
-    }
-    console.log(array);
-    for (let i = 0; i < array.length; i++) {
-      const bar = document.getElementById(i);
-      if (bar.style.heigth === `${array[i]}px`) {
-        bar.style.backgroundColor = "yellow";
       }
     }
   }
@@ -134,7 +138,7 @@ const SortingVisualizer = () => {
       if (animations[i] > -1) {
         setTimeout(() => {
           const barOne = document.getElementById(animations[i]);
-          barOne.style.backgroundColor = "AliceBlue";
+          barOne.style.backgroundColor = SORTEDCOLOR;
         }, i * ANIMATION_SPEED_MS);
       }
       if (animations[i].length > 1) {
@@ -163,7 +167,7 @@ const SortingVisualizer = () => {
     <div>
       <div className="navbar" id="navbar">
         <div
-          className="a"
+          className="a resetArray"
           id="resetArray"
           onClick={() => {
             resetArray(arrayBars);
@@ -171,14 +175,7 @@ const SortingVisualizer = () => {
         >
           Generate a new Array
         </div>
-        <div
-          className="a"
-          onClick={() => {
-            bubbleSort();
-          }}
-        >
-          Bubble Sort
-        </div>
+
         <div className="a" onClick={mergeSort}>
           Merge Sort
         </div>
@@ -189,9 +186,14 @@ const SortingVisualizer = () => {
         <div className="a" onClick={heapSort}>
           Heap Sort
         </div>
-        {/* <div className="a" onClick={makeArrayFlash}>
-          Flash
-        </div> */}
+        <div
+          className="a"
+          onClick={() => {
+            bubbleSort();
+          }}
+        >
+          Bubble Sort
+        </div>
       </div>
 
       <div className="container">
@@ -232,7 +234,7 @@ export function makeColor(barOne, barTwo) {
 }
 
 export function makeColorPivot(barOne) {
-  barOne.style.backgroundColor = "LightCyan";
+  barOne.style.backgroundColor = SORTEDCOLOR;
 }
 
 export function makeColorTemp(barOne) {
@@ -240,16 +242,17 @@ export function makeColorTemp(barOne) {
 }
 
 export function makeColorHeap(barOne, barTwo, animations) {
-  barOne.style.backgroundColor = SECONDARY_COLOR;
-  barTwo.style.backgroundColor = SECONDARY_COLOR;
-
   if (animations.length >= 5) {
+    barOne.style.backgroundColor = SECONDARY_COLOR;
+    barTwo.style.backgroundColor = SORTEDCOLOR;
     setTimeout(() => {
       barOne.style.backgroundColor = PRIMARY_COLOR;
       const bar = document.getElementById(animations[2]);
-      bar.style.backgroundColor = "AliceBlue";
+      bar.style.backgroundColor = SORTEDCOLOR;
     }, ANIMATION_SPEED_MS * 8);
   } else {
+    barOne.style.backgroundColor = SECONDARY_COLOR;
+    barTwo.style.backgroundColor = SECONDARY_COLOR;
     setTimeout(() => {
       barOne.style.backgroundColor = PRIMARY_COLOR;
       barTwo.style.backgroundColor = PRIMARY_COLOR;

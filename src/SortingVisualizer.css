@@ -9,10 +9,11 @@
   height: 92%;
   display: flex;
   justify-content: center;
+  background-color: whitesmoke;
 }
 
 .array-container {
-  border: 3px solid rgba(112, 112, 112, 0.8);
+  border: 3px solid rgba(0, 0, 0, 0.8);
   border-radius: 5px;
   background: white;
   width: 85%;
@@ -30,12 +31,12 @@
   width: 0.3rem;
   display: inline-block;
   margin: 30px 1px;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 0, 0, 0.6);
 }
 
 .navbar {
   background: rgba(0, 0, 0, 0.8);
-  height: 4%;
+  height: 5%;
   display: flex;
   text-align: center;
   align-items: center;
@@ -44,7 +45,7 @@
 
 .a {
   color: rgb(149, 235, 226);
-  height: 60%;
+  height: 50%;
   cursor: pointer;
   color: rgb(233, 233, 233);
   margin: 0px 25px;
@@ -60,7 +61,6 @@
 
 .whiteLine {
   margin-bottom: 15em;
-  background-color: rgb(0, 255, 234);
   height: 10px;
   width: 65%;
   z-index: 1;
