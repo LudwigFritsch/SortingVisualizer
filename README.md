@@ -1,7 +1,7 @@
 # Sorting Visualizer
 
 This project visualizes different sorting algorithms in action. Algorithms implemented are Quicksort, Heapsort, Mergesort and Bubblesort.
-You can check it out here (use Google Chrome): https://ludwigfritsch.github.io/SortingVisualizer/
+You can check it out here: https://ludwigfritsch.github.io/SortingVisualizer/
 
 ## Short technical explanation
 
