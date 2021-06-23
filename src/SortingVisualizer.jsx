@@ -5,17 +5,15 @@ import getMergeSortAnimations from "./algorithms/getMergeSortAnimations.js";
 import getHeapSortAnimations from "./algorithms/getHeapSortAnimations.js";
 import getQuickSortAnimations from "./algorithms/getQuickSortAnimations.js";
 
-// This is the main color of the array bars.
+
 const PRIMARY_COLOR = "rgb(190, 226, 250)";
 
-// This is the color of array bars that are being compared throughout the animations.
 const SECONDARY_COLOR = "rgba(0, 0, 0, 0.8)";
 
 const FLESH_COLOR = "rgb(215, 255, 233)";
 
 const SORTEDCOLOR = "aliceblue";
 
-// Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 4;
 
 const SortingVisualizer = () => {
